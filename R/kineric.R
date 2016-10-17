@@ -1,3 +1,6 @@
+## internal environment storing metadata on the active shard
+.shard <- new.env()
+
 #' Run Kinesis Consumer application
 #' @param initialize optional function to be run on startup
 #' @param processRecords function to process records taking a \code{data.frame} object with \code{partitionKey}, \code{sequenceNumber} and \code{data} columns as the \code{records} argument. Probably you only need the \code{data} column from this object
@@ -19,7 +22,7 @@ kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, 
         timestamp <- format(Sys.time(), tz = 'UTC')
         parsed <- lapply(list(...), function(x) ifelse(is.null(x), 'NULL', x))
         msg <- do.call(sprintf, c(msg, parsed))
-        sprintf("%s [%s UTC] %s %s\n", names(level), timestamp, line$shardId, msg)
+        sprintf("%s [%s UTC] %s %s\n", names(level), timestamp, kineRic:::.shard$id, msg)
     })
 
     ## run an infinite loop reading from stdin and writing to stout
@@ -30,6 +33,8 @@ kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, 
 
         ## init Kinesis consumer app
         if (line$action == 'initialize') {
+
+            .shard$id <- line$shardId
 
             flog.info('Start of initialize ')
             if (!missing(initialize)) {
