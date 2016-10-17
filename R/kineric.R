@@ -68,7 +68,8 @@ kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, 
                 partitionKey   = line$records$partitionKey,
                 sequenceNumber = line$records$sequenceNumber,
                 data           = sapply(line$records$data,
-                                        function(x) rawToChar(base64_dec(x)), USE.NAMES = FALSE))
+                                        function(x) rawToChar(base64_dec(x)), USE.NAMES = FALSE),
+            stringsAsFactors = FALSE)
 
             ## do business logic
             processRecords(records)
