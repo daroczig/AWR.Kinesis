@@ -16,7 +16,7 @@ kineric(initialize, processRecords, shutdown, checkpointing = TRUE,
 
 \item{checkpointing}{if set to \code{TRUE} (default), \code{kineric} will checkpoint after each \code{processRecords} call. To disable checkpointing altogether, set this to \code{FALSE}. If you want to checkpoint periodically, set this to the frequency in minutes as integer.}
 
-\item{logfile}{file path}
+\item{logfile}{file path of the log file. To disable logging, set \code{flog.threshold} to something high}
 }
 \description{
 Run Kinesis Consumer application

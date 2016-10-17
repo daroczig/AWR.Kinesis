@@ -2,7 +2,12 @@
 
 export(checkpoint)
 export(kineric)
+importFrom(futile.logger,appender.file)
+importFrom(futile.logger,flog.appender)
+importFrom(futile.logger,flog.debug)
+importFrom(futile.logger,flog.info)
+importFrom(futile.logger,flog.layout)
 importFrom(futile.logger,flog.trace)
+importFrom(jsonlite,base64_dec)
 importFrom(jsonlite,fromJSON)
 importFrom(jsonlite,toJSON)
-importFrom(jsonlite,base64_dec)
