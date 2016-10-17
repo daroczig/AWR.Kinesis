@@ -3,7 +3,7 @@
 #' @param processRecords function to process records taking a \code{data.frame} object with \code{partitionKey}, \code{sequenceNumber} and \code{data} columns as the \code{records} argument. Probably you only need the \code{data} column from this object
 #' @param shutdown optional function to be run when finished processing all records in a shard
 #' @param checkpointing if set to \code{TRUE} (default), \code{kineric} will checkpoint after each \code{processRecords} call. To disable checkpointing altogether, set this to \code{FALSE}. If you want to checkpoint periodically, set this to the frequency in minutes as integer.
-#' @param logfile file path
+#' @param logfile file path of the log file. To disable logging, set \code{flog.threshold} to something high
 #' @export
 kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, logfile = tempfile()) {
 
@@ -11,8 +11,16 @@ kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, 
     checkpoint_timestamp <- now()
 
     ## log to file instead of stdout (which is used for communication with the Kinesis daemon)
-    devnull <- flog.appender(appender.file(sprintf('%s.log', logfile)))
-    flog.info('Starting app')
+    devnull <- flog.appender(appender.file(logfile))
+    flog.info('Starting R Kinesis Consumer application')
+
+    ## add shard ID in each log line
+    flog.layout(function(level, msg, ...) {
+        timestamp <- format(Sys.time(), tz = 'UTC')
+        parsed <- lapply(list(...), function(x) ifelse(is.null(x), 'NULL', x))
+        msg <- do.call(sprintf, c(msg, parsed))
+        sprintf("%s [%s UTC] %s %s\n", names(level), timestamp, line$shardId, msg)
+    })
 
     ## run an infinite loop reading from stdin and writing to stout
     while (TRUE) {
@@ -23,17 +31,11 @@ kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, 
         ## init Kinesis consumer app
         if (line$action == 'initialize') {
 
-            flog.debug(paste('Shard:', line$shardId))
-            logfile <- sprintf('%s-%s.log', logfile, line$shardId)
-            flog.debug(paste('Redirecting log to', logfile))
-            flog.appender(appender.file(logfile))
-
-            ## run custom initialize script
-            flog.info('Init started')
+            flog.info('Start of initialize ')
             if (!missing(initialize)) {
                 initialize()
             }
-            flog.info('Init complete')
+            flog.info('End of initialize')
 
         }
 
