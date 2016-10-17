@@ -2,6 +2,7 @@
 
 export(checkpoint)
 export(kineric)
-importFrom(base64,base64_dec)
 importFrom(futile.logger,flog.trace)
 importFrom(jsonlite,fromJSON)
+importFrom(jsonlite,toJSON)
+importFrom(jsonlite,base64_dec)
