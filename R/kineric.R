@@ -8,7 +8,7 @@
 kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, logfile = tempfile()) {
 
     ## store when we last checkpointed
-    checkpoint_timestamp <- now()
+    checkpoint_timestamp <- Sys.time()
 
     ## log to file instead of stdout (which is used for communication with the Kinesis daemon)
     devnull <- flog.appender(appender.file(logfile))
@@ -76,13 +76,13 @@ kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, 
 
             ## checkpoint once every few minutes
             if (is.integer(checkpointing) && length(checkpointing) == 1 &&
-                difftime(now(), checkpoint_timestamp, units = 'mins') > checkpointing) {
+                difftime(Sys.time(), checkpoint_timestamp, units = 'mins') > checkpointing) {
 
                 flog.debug('Time to checkpoint')
                 checkpoint(line$records[nrow(line$records), 'sequenceNumber'])
 
                 ## reset timer
-                checkpoint_timestamp <- now()
+                checkpoint_timestamp <- Sys.time()
 
             }
 
