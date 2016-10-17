@@ -1,0 +1,14 @@
+Type: Package
+Package: kineRic
+Maintainer: Gergely Daroczi <gergely.daroczi@card.com>
+Author: Gergely Daroczi <gergely.daroczi@card.com>
+Title: Amazon Kinesis Consumer Application for Stream Processing
+Description: Fetching data from Amazon Kinesis Streams via the Java-based AWS MultiLangDaemon.
+Version: 0.1
+Date: 2016-10-18
+URL: https://github.com/cardcorp/kineRic
+License: AGPL-3
+Imports:
+    futile.logger,
+    jsonlite,
+    base64
