@@ -10,4 +10,5 @@ URL: https://github.com/cardcorp/kineRic
 License: AGPL-3
 Imports:
     futile.logger,
-    jsonlite
+    jsonlite,
+    rJava
