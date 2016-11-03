@@ -2,8 +2,6 @@
 
 export(checkpoint)
 export(kineric)
-export(kms_decrypt)
-export(kms_encrypt)
 importFrom(futile.logger,appender.file)
 importFrom(futile.logger,flog.appender)
 importFrom(futile.logger,flog.debug)
