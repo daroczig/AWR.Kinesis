@@ -3,16 +3,41 @@
 .shard$id <- NA
 
 #' Run Kinesis Consumer application
-#' @param initialize optional function to be run on startup
+#' @param initialize optional function to be run on startup. Please note that the variables created inside of this function will not be available to eg \code{processRecords}, so make sure to store the shared variables in the global namespace
 #' @param processRecords function to process records taking a \code{data.frame} object with \code{partitionKey}, \code{sequenceNumber} and \code{data} columns as the \code{records} argument. Probably you only need the \code{data} column from this object
 #' @param shutdown optional function to be run when finished processing all records in a shard
 #' @param checkpointing if set to \code{TRUE} (default), \code{kineric} will checkpoint after each \code{processRecords} call. To disable checkpointing altogether, set this to \code{FALSE}. If you want to checkpoint periodically, set this to the frequency in minutes as integer.
+#' @param updater optional list of list(s) including frequency (in minutes) and function to be run, most likely to update some objects in the global namespace populated first in the \code{initialize} call. If the frequency is smaller than how long the \code{processRecords} call runs, it will be triggered once after each \code{processRecords} call
 #' @param logfile file path of the log file. To disable logging, set \code{flog.threshold} to something high
 #' @export
-kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, logfile = tempfile()) {
+#' @examples \dontrun{
+#' kineRic::kineric(
+#'   initialize = function() flog.info('Loading some data'),
+#'   processRecords = function(records) flog.info('Received some records from Kinesis'),
+#'   updater = list(list(1, function() flog.info('Updating some data every minute')),
+#'                  list(1/60, function() flog.info('This is a high frequency updater call')))
+#' )
+#' }
+kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, updater, logfile = tempfile()) {
 
     ## store when we last checkpointed
     checkpoint_timestamp <- Sys.time()
+
+    if (!missing(updater)) {
+
+        ## check object structure
+        if (!is.list(updater)) stop('The updater argument should be a list of list(s).')
+        for (ui in 1:length(updater)) {
+            if (!is.list(updater[[i]])) stop(paste('The', i, 'st/nd/th updater should be a list.'))
+            if (length(updater[[i]]) != 2) stop(paste('The', i, 'st/nd/th updater should include 2 elements.'))
+            if (!is.numeric(updater[[i]][[1]])) stop(paste('The first element of the', i, 'st/nd/th updater should be a numeric frequency.'))
+            if (!is.function(updater[[i]][[2]])) stop(paste('The second element of the', i, 'st/nd/th updater should be a function.'))
+        }
+
+        ## init time for the updater functions
+        updater_timestamps <- rep(Sys.time(), length(updater))
+
+    }
 
     ## log to file instead of stdout (which is used for communication with the Kinesis daemon)
     devnull <- flog.appender(appender.file(logfile))
@@ -91,6 +116,17 @@ kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, 
                 ## reset timer
                 checkpoint_timestamp <- Sys.time()
 
+            }
+
+            ## updater functions
+            if (!missing(updater)) {
+                for (ui in 1:length(updater)) {
+                    if (difftime(Sys.time(), updater_timestamps[i], units = 'mins') > updater[[i]][[1]]) {
+                        flog.debug(paste('Time to run updater', i))
+                        updater[[i]][[2]]()
+                        updater_timestamps[i] <- Sys.time()
+                    }
+                }
             }
 
         }
