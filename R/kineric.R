@@ -19,8 +19,10 @@ kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, 
     flog.info('Starting R Kinesis Consumer application')
 
     ## add shard ID in each log line
-    flog.layout(function(level, msg) {
+    flog.layout(function(level, msg, ...) {
         timestamp <- format(Sys.time(), tz = 'UTC')
+        parsed <- lapply(list(...), function(x) ifelse(is.null(x), 'NULL', x))
+        msg <- do.call(sprintf, c(msg, parsed))
         sprintf("%s [%s UTC] %s %s\n", names(level), timestamp, kineRic:::.shard$id, msg)
     })
 
