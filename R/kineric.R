@@ -29,10 +29,10 @@ kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, 
         ## check object structure
         if (!is.list(updater)) stop('The updater argument should be a list of list(s).')
         for (ui in 1:length(updater)) {
-            if (!is.list(updater[[ui]])) stop(paste('The', i, 'st/nd/th updater should be a list.'))
-            if (length(updater[[ui]]) != 2) stop(paste('The', i, 'st/nd/th updater should include 2 elements.'))
-            if (!is.numeric(updater[[ui]][[1]])) stop(paste('The first element of the', i, 'st/nd/th updater should be a numeric frequency.'))
-            if (!is.function(updater[[ui]][[2]])) stop(paste('The second element of the', i, 'st/nd/th updater should be a function.'))
+            if (!is.list(updater[[ui]])) stop(paste('The', ui, 'st/nd/th updater should be a list.'))
+            if (length(updater[[ui]]) != 2) stop(paste('The', ui, 'st/nd/th updater should include 2 elements.'))
+            if (!is.numeric(updater[[ui]][[1]])) stop(paste('The first element of the', ui, 'st/nd/th updater should be a numeric frequency.'))
+            if (!is.function(updater[[ui]][[2]])) stop(paste('The second element of the', ui, 'st/nd/th updater should be a function.'))
         }
 
         ## init time for the updater functions
