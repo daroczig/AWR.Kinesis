@@ -8,7 +8,7 @@ kineric(initialize, processRecords, shutdown, checkpointing = TRUE, updater,
   logfile = tempfile())
 }
 \arguments{
-\item{initialize}{optional function to be run on startup. Please note that the variables created inside of this function will not be available to eg \code{processRecords}, so make sure to store the shared variables in the global namespace}
+\item{initialize}{optional function to be run on startup. Please note that the variables created inside of this function will not be available to eg \code{processRecords}, so make sure to store the shared variables in the parent or global namespace}
 
 \item{processRecords}{function to process records taking a \code{data.frame} object with \code{partitionKey}, \code{sequenceNumber} and \code{data} columns as the \code{records} argument. Probably you only need the \code{data} column from this object}
 
@@ -16,7 +16,7 @@ kineric(initialize, processRecords, shutdown, checkpointing = TRUE, updater,
 
 \item{checkpointing}{if set to \code{TRUE} (default), \code{kineric} will checkpoint after each \code{processRecords} call. To disable checkpointing altogether, set this to \code{FALSE}. If you want to checkpoint periodically, set this to the frequency in minutes as integer.}
 
-\item{updater}{optional list of list(s) including frequency (in minutes) and function to be run, most likely to update some objects in the global namespace populated first in the \code{initialize} call. If the frequency is smaller than how long the \code{processRecords} call runs, it will be triggered once after each \code{processRecords} call}
+\item{updater}{optional list of list(s) including frequency (in minutes) and function to be run, most likely to update some objects in the parent or global namespace populated first in the \code{initialize} call. If the frequency is smaller than how long the \code{processRecords} call runs, it will be triggered once after each \code{processRecords} call}
 
 \item{logfile}{file path of the log file. To disable logging, set \code{flog.threshold} to something high}
 }
@@ -25,6 +25,7 @@ Run Kinesis Consumer application
 }
 \examples{
 \dontrun{
+flog.threshold(FATAL)
 kineRic::kineric(
   initialize = function() flog.info('Loading some data'),
   processRecords = function(records) flog.info('Received some records from Kinesis'),
