@@ -97,7 +97,7 @@ kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, 
                 sequenceNumber = line$records$sequenceNumber,
                 data           = sapply(line$records$data,
                                         function(x) rawToChar(base64_dec(x)), USE.NAMES = FALSE),
-            stringsAsFactors = FALSE)
+                stringsAsFactors = FALSE)
 
             ## do business logic
             processRecords(records)
