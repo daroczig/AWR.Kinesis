@@ -40,6 +40,9 @@ kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, 
 
     }
 
+    ## schedule garbage collection
+    gc_timestamp <- Sys.time()
+
     ## log to file instead of stdout (which is used for communication with the Kinesis daemon)
     devnull <- flog.appender(appender.file(logfile))
     flog.info('Starting R Kinesis Consumer application')
@@ -128,6 +131,11 @@ kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, 
                         updater_timestamps[ui] <- Sys.time()
                     }
                 }
+            }
+
+            ## just in case, garbage collection (once in every hour?)
+            if (difftime(Sys.time(), gc_timestamp, units = 'mins') > 60) {
+                invisible(gc())
             }
 
         }
