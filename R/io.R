@@ -3,10 +3,8 @@
 #' @keywords internal
 read_line_from_stdin <- function() {
 
-    ## open connection for reading, read, then explicitly close
-    suppressWarnings(con <- file('stdin', open = 'r', blocking = TRUE))
-    line <- scan(con, what = character(0), nlines = 1, quiet = TRUE)
-    close(con)
+    ## stdincon was opened at package load
+    line <- scan(stdincon, what = character(0), nlines = 1, quiet = TRUE)
 
     ## empty line received
     if (length(line) == 0) {
