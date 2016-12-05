@@ -1,6 +1,6 @@
 # kineRic: An Amazon Kinesis Client Library for R
 
-This R package is a wrapper around and an interface to the Amazon Kinesis Client Library (KCL) [MultiLangDaemon](https://github.com/awslabs/amazon-kinesis-client/tree/5d045521ce2da803cb4791d19faaeb63ea267c83/src/main/java/com/amazonaws/services/kinesis/multilang), which is part of the [Amazon KCL for Java][https://github.com/awslabs/amazon-kinesis-client]. This Java-based daemon takes care of communicating with the Kinesis API (to retrieve status of streams, shards and eg to retrieve records from those) and also handles a bunch of other useful things, like checkpointing using Amazon DynamoDB -- so that the R developer can actually concentrate on the stream processing algorithm.
+This R package is a wrapper around and an interface to the Amazon Kinesis Client Library (KCL) [MultiLangDaemon](https://github.com/awslabs/amazon-kinesis-client/tree/5d045521ce2da803cb4791d19faaeb63ea267c83/src/main/java/com/amazonaws/services/kinesis/multilang), which is part of the [Amazon KCL for Java](https://github.com/awslabs/amazon-kinesis-client). This Java-based daemon takes care of communicating with the Kinesis API (to retrieve status of streams, shards and eg to retrieve records from those) and also handles a bunch of other useful things, like checkpointing using Amazon DynamoDB -- so that the R developer can actually concentrate on the stream processing algorithm.
 
 ## Writing a record processor application
 
