@@ -35,7 +35,7 @@ So this application will log
 * `Updating some data every minute` around once a minute,
 * `Bye` when the app stops.
 
-Use the `initialize` function to load/cache some data for the `processRecords` calls, then use the `updater` functions to refresh your cached data on a regular basis. To store credentials to databases, APIs etc, use the [kmR](https://github.com/cardcorp/kineRic) R package to interact with the AWS Key Management Service.
+Use the `initialize` function to load/cache some data for the `processRecords` calls, then use the `updater` functions to refresh your cached data on a regular basis. To store credentials to databases, APIs etc, use the [kmR](https://github.com/cardcorp/kmR) R package to interact with the AWS Key Management Service.
 
 ## Executing the record processor application
 
