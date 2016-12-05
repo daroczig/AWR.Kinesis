@@ -52,7 +52,7 @@ kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, 
         timestamp <- format(Sys.time(), tz = 'UTC')
         parsed <- lapply(list(...), function(x) ifelse(is.null(x), 'NULL', x))
         msg <- do.call(sprintf, c(msg, parsed))
-        sprintf("%s [%s UTC] %s %s\n", names(level), timestamp, kineRic:::.shard$id, msg)
+        sprintf("%s [%s UTC] %s %s\n", names(level), timestamp, .shard$id, msg)
     })
 
     ## run an infinite loop reading from stdin and writing to stout

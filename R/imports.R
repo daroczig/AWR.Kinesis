@@ -5,6 +5,7 @@
 #' @importFrom futile.logger flog.trace flog.debug flog.info flog.appender appender.file flog.layout
 #' @importFrom jsonlite fromJSON toJSON base64_dec base64_enc unbox
 #' @importFrom rJava .jnew J .jbyte
+#' @importFrom utils assignInMyNamespace
 #' @name kineRic-package
 NULL
 
