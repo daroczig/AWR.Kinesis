@@ -21,3 +21,10 @@ stdincon <- NULL
                         suppressWarnings(file('stdin', open = 'r', blocking = TRUE)))
 
 }
+
+.onUnload <- function(libpath) {
+
+    ## close opened connection
+    close(stdincon)
+
+}
