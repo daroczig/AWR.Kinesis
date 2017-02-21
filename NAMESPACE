@@ -2,6 +2,7 @@
 
 export(checkpoint)
 export(kinesis_consumer)
+export(kinesis_put_record)
 import(AWR)
 importFrom(futile.logger,appender.file)
 importFrom(futile.logger,flog.appender)
