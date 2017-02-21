@@ -12,7 +12,7 @@
 #' @export
 #' @examples \dontrun{
 #' flog.threshold(FATAL)
-#' kineRic::kineric(
+#' AWS.Kinesis::kineric(
 #'   initialize = function() flog.info('Loading some data'),
 #'   processRecords = function(records) flog.info('Received some records from Kinesis'),
 #'   updater = list(list(1, function() flog.info('Updating some data every minute')),

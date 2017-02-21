@@ -2,6 +2,7 @@
 
 export(checkpoint)
 export(kineric)
+import(AWR)
 importFrom(futile.logger,appender.file)
 importFrom(futile.logger,flog.appender)
 importFrom(futile.logger,flog.debug)
