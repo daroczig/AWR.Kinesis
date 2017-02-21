@@ -7,7 +7,9 @@ This R package is a wrapper around and an interface to the Amazon Kinesis Client
 A minimal stream processing script written in R looks something like:
 
 ```r
-AWS.Kinesis::kineric(processRecords = function(records) flog.info(jsonlite::toJSON(records)))
+AWS.Kinesis::kinesis_consumer(processRecords = function(records) {
+	flog.info(jsonlite::toJSON(records)))
+}
 ```
 
 This R script, executed by the MultiLangDaemon, reads records from the Kinesis stream and logs those as JSON in the application log, which by default is a temporary file. Note: it's important not to write anything to `stdout`, as `stdin` and `stdout` is used by the package internals to communicate with the MultiLangDaemon. But as the package is already depends on and integrates the `futile.logger` R package, it's very convenient to use the `flog` functions for app logging with various log levels.
@@ -15,13 +17,17 @@ This R script, executed by the MultiLangDaemon, reads records from the Kinesis s
 Let's see a more complex stream processing app:
 
 ```r
-AWS.Kinesis::kineric(
-    initialize     = function() flog.info('Loading some data'),
-    processRecords = function(records) flog.info('Received some records from Kinesis'),
-    shutdown       = function() flog.info('Bye'),
-    updater        = list(list(1, function() flog.info('Updating some data every minute')),
-                          list(1/60, function() flog.info('This is a high frequency updater call')))
-)
+AWS.Kinesis::kinesis_consumer(
+        initialize     = function()
+            flog.info('Loading some data'),
+        processRecords = function(records)
+            flog.info('Received some records from Kinesis'),
+        shutdown       = function()
+            flog.info('Bye'),
+        updater        = list(list(1, function()
+            flog.info('Updating some data every minute')),
+            list(1/60, function()
+                flog.info('This is a high frequency updater call'))))
 ```
 
 This application takes multiple (anonymous) functions. Besides the `processRecords` argument, which we used in the above application to define a function to process the records, we also have an init, a shutdown and two updater functions. The `initialize` and `shutdown` calls are trivial: these functions are run when the applications starts and when it stops, eg when there are no further records to be read from a shard due to a shard merge operation.

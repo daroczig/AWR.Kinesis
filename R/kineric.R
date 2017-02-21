@@ -6,20 +6,21 @@
 #' @param initialize optional function to be run on startup. Please note that the variables created inside of this function will not be available to eg \code{processRecords}, so make sure to store the shared variables in the parent or global namespace
 #' @param processRecords function to process records taking a \code{data.frame} object with \code{partitionKey}, \code{sequenceNumber} and \code{data} columns as the \code{records} argument. Probably you only need the \code{data} column from this object
 #' @param shutdown optional function to be run when finished processing all records in a shard
-#' @param checkpointing if set to \code{TRUE} (default), \code{kineric} will checkpoint after each \code{processRecords} call. To disable checkpointing altogether, set this to \code{FALSE}. If you want to checkpoint periodically, set this to the frequency in minutes as integer.
+#' @param checkpointing if set to \code{TRUE} (default), \code{kinesis_consumer} will checkpoint after each \code{processRecords} call. To disable checkpointing altogether, set this to \code{FALSE}. If you want to checkpoint periodically, set this to the frequency in minutes as integer.
 #' @param updater optional list of list(s) including frequency (in minutes) and function to be run, most likely to update some objects in the parent or global namespace populated first in the \code{initialize} call. If the frequency is smaller than how long the \code{processRecords} call runs, it will be triggered once after each \code{processRecords} call
 #' @param logfile file path of the log file. To disable logging, set \code{flog.threshold} to something high
 #' @export
 #' @examples \dontrun{
 #' flog.threshold(FATAL)
-#' AWS.Kinesis::kineric(
+#' AWS.Kinesis::kinesis_consumer(
 #'   initialize = function() flog.info('Loading some data'),
 #'   processRecords = function(records) flog.info('Received some records from Kinesis'),
 #'   updater = list(list(1, function() flog.info('Updating some data every minute')),
 #'                  list(1/60, function() flog.info('This is a high frequency updater call')))
 #' )
 #' }
-kineric <- function(initialize, processRecords, shutdown, checkpointing = TRUE, updater, logfile = tempfile()) {
+kinesis_consumer <- function(initialize, processRecords, shutdown,
+                             checkpointing = TRUE, updater, logfile = tempfile()) {
 
     ## store when we last checkpointed
     checkpoint_timestamp <- Sys.time()
