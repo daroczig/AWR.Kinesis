@@ -23,6 +23,9 @@ kinesis_consumer(initialize, processRecords, shutdown, checkpointing = TRUE,
 \description{
 Run Kinesis Consumer application
 }
+\note{
+Don't run this function directly, it is to be called by the MultiLangDaemon. See the package README for more details.
+}
 \examples{
 \dontrun{
 flog.threshold(FATAL)
@@ -33,5 +36,8 @@ AWS.Kinesis::kinesis_consumer(
                  list(1/60, function() flog.info('This is a high frequency updater call')))
 )
 }
+}
+\references{
+\url{https://github.com/awslabs/amazon-kinesis-client/blob/master/src/main/java/com/amazonaws/services/kinesis/multilang/package-info.java}
 }
 

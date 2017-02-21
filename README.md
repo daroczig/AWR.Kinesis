@@ -1,6 +1,6 @@
 # AWS.Kinesis: An Amazon Kinesis Client Library for R
 
-This R package is a wrapper around and an interface to the Amazon Kinesis Client Library (KCL) [MultiLangDaemon](https://github.com/awslabs/amazon-kinesis-client/tree/5d045521ce2da803cb4791d19faaeb63ea267c83/src/main/java/com/amazonaws/services/kinesis/multilang), which is part of the [Amazon KCL for Java](https://github.com/awslabs/amazon-kinesis-client). This Java-based daemon takes care of communicating with the Kinesis API (to retrieve status of streams, shards and eg to retrieve records from those) and also handles a bunch of other useful things, like checkpointing using Amazon DynamoDB -- so that the R developer can actually concentrate on the stream processing algorithm.
+This R package is a wrapper around and an interface to the Amazon Kinesis Client Library (KCL) [MultiLangDaemon](https://github.com/awslabs/amazon-kinesis-client/blob/master/src/main/java/com/amazonaws/services/kinesis/multilang/package-info.java), which is part of the [Amazon KCL for Java](https://github.com/awslabs/amazon-kinesis-client). This Java-based daemon takes care of communicating with the Kinesis API (to retrieve status of streams, shards and eg to retrieve records from those) and also handles a bunch of other useful things, like checkpointing using Amazon DynamoDB -- so that the R developer can actually concentrate on the stream processing algorithm.
 
 ## Writing a record processor application
 
@@ -41,11 +41,11 @@ So this application will log
 * `Updating some data every minute` around once a minute,
 * `Bye` when the app stops.
 
-Use the `initialize` function to load/cache some data for the `processRecords` calls, then use the `updater` functions to refresh your cached data on a regular basis. To store credentials to databases, APIs etc, use the [kmR](https://github.com/cardcorp/kmR) R package to interact with the AWS Key Management Service.
+Use the `initialize` function to load/cache some data for the `processRecords` calls, then use the `updater` functions to refresh your cached data on a regular basis. To store credentials to databases, APIs etc, use the [AWR.KMS](https://github.com/cardcorp/AWR.KMS) R package to interact with the AWS Key Management Service.
 
 ## Executing the record processor application
 
-The R script has to be an executable, so add the executable bit (`chmod +x`) and also set a hashbang (for eg `Rscript` or littler). Then define a configuration file for the MultiLangDaemon, for example:
+The R script has to be an executable, so add the executable bit (`chmod +x`) and also set a hashbang (for eg `Rscript` or use [littler](http://dirk.eddelbuettel.com/code/littler.html)). Then define a configuration file for the MultiLangDaemon, for example:
 
 ```
 executableName = ./demo_app.R
@@ -60,6 +60,8 @@ Running the MultiLangDaemon with the above defined configuration file is easy, a
 ```
 /usr/bin/java -cp `Rscript --vanilla -e "cat(system.file('java', package = 'AWR'))"`/*:`pwd` com.amazonaws.services.kinesis.multilang.MultiLangDaemon ./demo.properties
 ```
+
+Please note that you need AWS access to both Kinesis and DynamoDB to get the above examples working.
 
 ## Further reading
 

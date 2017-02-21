@@ -10,6 +10,8 @@
 #' @param updater optional list of list(s) including frequency (in minutes) and function to be run, most likely to update some objects in the parent or global namespace populated first in the \code{initialize} call. If the frequency is smaller than how long the \code{processRecords} call runs, it will be triggered once after each \code{processRecords} call
 #' @param logfile file path of the log file. To disable logging, set \code{flog.threshold} to something high
 #' @export
+#' @note Don't run this function directly, it is to be called by the MultiLangDaemon. See the package README for more details.
+#' @references \url{https://github.com/awslabs/amazon-kinesis-client/blob/master/src/main/java/com/amazonaws/services/kinesis/multilang/package-info.java}
 #' @examples \dontrun{
 #' flog.threshold(FATAL)
 #' AWS.Kinesis::kinesis_consumer(
