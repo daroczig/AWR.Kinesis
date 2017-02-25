@@ -2,7 +2,7 @@
 #' @param stream stream name (string)
 #' @param region AWS region (string)
 #' @param data data blog (string)
-#' @param parititionKey determines which shard in the stream the data record is assigned to, eg username, stock symbol etc (string)
+#' @param partitionKey determines which shard in the stream the data record is assigned to, eg username, stock symbol etc (string)
 #' @export
 #' @references \url{http://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/kinesis/model/PutRecordRequest.html}
 #' @examples \dontrun{

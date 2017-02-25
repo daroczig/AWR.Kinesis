@@ -13,7 +13,7 @@ kinesis_put_record(stream, region = "us-west-1", data, partitionKey)
 
 \item{data}{data blog (string)}
 
-\item{parititionKey}{determines which shard in the stream the data record is assigned to, eg username, stock symbol etc (string)}
+\item{partitionKey}{determines which shard in the stream the data record is assigned to, eg username, stock symbol etc (string)}
 }
 \value{
 invisible list including the shard id and sequence number
