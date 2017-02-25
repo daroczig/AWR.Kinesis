@@ -58,7 +58,7 @@ This config file will look for a `demo_stream` Kinesis stream in the default (US
 Running the MultiLangDaemon with the above defined configuration file is easy, as the required `jar` files are bundled with the `AWR` package:
 
 ```
-/usr/bin/java -cp `Rscript --vanilla -e "cat(system.file('java', package = 'AWR'))"`/*:`pwd` com.amazonaws.services.kinesis.multilang.MultiLangDaemon ./demo.properties
+/usr/bin/java -cp `Rscript --vanilla -e "cat(paste(c(sapply(c('AWR', 'AWR.Kinesis'), function(pkg) file.path(system.file('java', package = pkg), '*')), './'), collapse = ':'))"` com.amazonaws.services.kinesis.multilang.MultiLangDaemon ./app.properties
 ```
 
 Please note that you need AWS access to both Kinesis and DynamoDB to get the above examples working.
