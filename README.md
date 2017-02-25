@@ -45,7 +45,7 @@ Use the `initialize` function to load/cache some data for the `processRecords` c
 
 ## Executing the record processor application
 
-The R script has to be an executable, so add the executable bit (`chmod +x`) and also set a hashbang (for eg `Rscript` or use [littler](http://dirk.eddelbuettel.com/code/littler.html)). Then define a configuration file for the MultiLangDaemon, for example:
+The R script has to be an executable, so add the executable bit (`chmod +x`) and also set a hashbang (for eg `Rscript` or use [littler](http://dirk.eddelbuettel.com/code/littler.html)). Then define a configuration file for the MultiLangDaemon, for example the content of `app.properties` could be as simple as:
 
 ```
 executableName = ./demo_app.R
@@ -55,7 +55,13 @@ applicationName = demo_app
 
 This config file will look for a `demo_stream` Kinesis stream in the default (US East) region, start reading the oldest available record (via `TRIM_HORIZON`), and run the `demo_app.R` script to process the records, using to the `demo_app` DynamodDB table for checkpointing. There are quite many other useful settings as well, see the [example file of the Python client](https://github.com/awslabs/amazon-kinesis-client-python/blob/master/samples/sample.properties) for more details.
 
-Running the MultiLangDaemon with the above defined configuration file is easy, as the required `jar` files are bundled with the `AWR` package:
+Running the MultiLangDaemon with the above defined configuration file is easy, as the required `jar` files are bundled with the `AWR` and `AWR.Kinesis` packages. So first, identify where the `jar` files were installed:
+
+```r
+sapply(c('AWR', 'AWR.Kinesis'), function(pkg) system.file('java', package = pkg))
+```
+
+This returns two folders that you should pass as custom classpaths to `java`, for example:
 
 ```
 /usr/bin/java -cp `Rscript --vanilla -e "cat(paste(c(sapply(c('AWR', 'AWR.Kinesis'), function(pkg) file.path(system.file('java', package = pkg), '*')), './'), collapse = ':'))"` com.amazonaws.services.kinesis.multilang.MultiLangDaemon ./app.properties
