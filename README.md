@@ -24,8 +24,9 @@ AWR.Kinesis::kinesis_consumer(
             flog.info('Received some records from Kinesis'),
         shutdown       = function()
             flog.info('Bye'),
-        updater        = list(list(1, function()
-            flog.info('Updating some data every minute')),
+        updater        = list(
+            list(1, function()
+                flog.info('Updating some data every minute')),
             list(1/60, function()
                 flog.info('This is a high frequency updater call'))))
 ```
