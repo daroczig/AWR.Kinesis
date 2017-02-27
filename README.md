@@ -8,7 +8,7 @@ A minimal stream processing script written in R looks something like:
 
 ```r
 AWR.Kinesis::kinesis_consumer(processRecords = function(records) {
-	flog.info(jsonlite::toJSON(records)))
+	flog.info(jsonlite::toJSON(records))
 }
 ```
 
