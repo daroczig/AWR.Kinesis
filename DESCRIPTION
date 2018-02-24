@@ -13,3 +13,4 @@ Imports:
     futile.logger,
     jsonlite,
     rJava
+RoxygenNote: 6.0.1

@@ -21,7 +21,7 @@ read_line_from_stdin <- function() {
 }
 
 #' Securely write a line to stdout with logging
-#' @param line
+#' @param line string
 #' @keywords internal
 write_line_to_stdout <- function(line) {
     flush(stdout())
