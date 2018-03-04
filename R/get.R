@@ -2,11 +2,20 @@
 #' @param stream stream name (string)
 #' @param region AWS region (string)
 #' @param limit number of records to fetch
+#' @param iterator_type shard iterator type
+#' @param start_sequence_number for \code{AT_SEQUENCE_NUMBER} and \code{AFTER_SEQUENCE_NUMBER} iterators
+#' @param start_timestamp for \code{AT_TIMESTAMP} iterator
 #' @note Use this no more than getting sample data from a stream - it's not intended for prod usage.
 #' @references \url{https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/kinesis/model/GetRecordsRequest.html}
 #' @return character vector that you might want to post-process eg with \code{jsonlite::stream_in}
 #' @export
-kinesis_get_records <- function(stream, region = 'us-west-1', limit = 25) {
+kinesis_get_records <- function(stream, region = 'us-west-1', limit = 25,
+                                iterator_type = c('TRIM_HORIZON', 'LATEST',
+                                                  'AT_SEQUENCE_NUMBER', 'AFTER_SEQUENCE_NUMBER',
+                                                  'AT_TIMESTAMP'),
+                                start_sequence_number, start_timestamp) {
+
+    iterator_type <- match.arg(iterator_type)
 
     ## prepare Kinesis client
     client <- .jnew('com.amazonaws.services.kinesis.AmazonKinesisClient')
@@ -16,7 +25,13 @@ kinesis_get_records <- function(stream, region = 'us-west-1', limit = 25) {
     req <- .jnew('com.amazonaws.services.kinesis.model.GetShardIteratorRequest')
     req$setStreamName(stream)
     req$setShardId(.jnew('java/lang/String', '0'))
-    req$setShardIteratorType('TRIM_HORIZON')
+    req$setShardIteratorType(iterator_type)
+    if (!missing(start_sequence_number)) {
+        req$setStartingSequenceNumber(start_sequence_number)
+    }
+    if (!missing(start_timestamp)) {
+        req$setTimestamp(start_timestamp)
+    }
     iterator <- client$getShardIterator(req)$getShardIterator()
 
     ## get records

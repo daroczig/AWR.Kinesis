@@ -4,7 +4,10 @@
 \alias{kinesis_get_records}
 \title{Get record from a Kinesis Stream}
 \usage{
-kinesis_get_records(stream, region = "us-west-1", limit = 25)
+kinesis_get_records(stream, region = "us-west-1", limit = 25,
+  iterator_type = c("TRIM_HORIZON", "LATEST", "AT_SEQUENCE_NUMBER",
+  "AFTER_SEQUENCE_NUMBER", "AT_TIMESTAMP"), start_sequence_number,
+  start_timestamp)
 }
 \arguments{
 \item{stream}{stream name (string)}
@@ -12,6 +15,12 @@ kinesis_get_records(stream, region = "us-west-1", limit = 25)
 \item{region}{AWS region (string)}
 
 \item{limit}{number of records to fetch}
+
+\item{iterator_type}{shard iterator type}
+
+\item{start_sequence_number}{for \code{AT_SEQUENCE_NUMBER} and \code{AFTER_SEQUENCE_NUMBER} iterators}
+
+\item{start_timestamp}{for \code{AT_TIMESTAMP} iterator}
 }
 \value{
 character vector that you might want to post-process eg with \code{jsonlite::stream_in}
