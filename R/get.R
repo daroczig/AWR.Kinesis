@@ -24,24 +24,19 @@ kinesis_get_records <- function(stream, region = 'us-west-1', limit = 25,
     client$setEndpoint(sprintf('kinesis.%s.amazonaws.com', region))
 
     ## pick a random shard if no specified
-    if (missing(shard)) {
+    if (missing(shard_id)) {
         shards <- client$describeStream(stream)
         shards <- sapply(
             as.list(shards$getStreamDescription()$getShards()$toArray()),
             function(x) x$getShardId())
         shards <- sub('^shardId-', '', shards)
-        shard  <- sample(shards, 1)
+        shard_id <- sample(shards, 1)
     }
-
-    ## list shards
-    req <- .jnew('com.amazonaws.services.kinesis.model.ListShardsRequest')
-    req$setStreamName(stream)
-    shards <- client$ListShards(req)
 
     ## prepare iterator
     req <- .jnew('com.amazonaws.services.kinesis.model.GetShardIteratorRequest')
     req$setStreamName(stream)
-    req$setShardId(.jnew('java/lang/String', '0'))
+    req$setShardId(.jnew('java/lang/String', shard_id))
     req$setShardIteratorType(iterator_type)
     if (!missing(start_sequence_number)) {
         req$setStartingSequenceNumber(start_sequence_number)
