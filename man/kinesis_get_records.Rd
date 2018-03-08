@@ -4,7 +4,7 @@
 \alias{kinesis_get_records}
 \title{Get record from a Kinesis Stream}
 \usage{
-kinesis_get_records(stream, region = "us-west-1", limit = 25,
+kinesis_get_records(stream, region = "us-west-1", limit = 25, shard_id,
   iterator_type = c("TRIM_HORIZON", "LATEST", "AT_SEQUENCE_NUMBER",
   "AFTER_SEQUENCE_NUMBER", "AT_TIMESTAMP"), start_sequence_number,
   start_timestamp)
@@ -15,6 +15,8 @@ kinesis_get_records(stream, region = "us-west-1", limit = 25,
 \item{region}{AWS region (string)}
 
 \item{limit}{number of records to fetch}
+
+\item{shard_id}{optional shard id - will pick a random active shard if left empty}
 
 \item{iterator_type}{shard iterator type}
 
